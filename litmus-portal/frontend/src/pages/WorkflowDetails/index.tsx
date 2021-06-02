@@ -12,7 +12,7 @@ import Scaffold from '../../containers/layouts/Scaffold';
 import {
   SCHEDULE_DETAILS,
   WORKFLOW_DETAILS_WITH_EXEC_DATA,
-  WORKFLOW_EVENTS,
+  WORKFLOW_EVENTS_WITH_EXEC_DATA,
 } from '../../graphql';
 import {
   ScheduleDataVars,
@@ -24,6 +24,7 @@ import {
   Workflow,
   WorkflowDataVars,
   WorkflowSubscription,
+  WorkflowSubscriptionInput,
 } from '../../models/graphql/workflowData';
 import useActions from '../../redux/actions';
 import * as NodeSelectionActions from '../../redux/actions/nodeSelection';
@@ -94,44 +95,25 @@ const WorkflowDetails: React.FC = () => {
 
   // Using subscription to get realtime data
   useEffect(() => {
-    if (
-      workflow?.execution_data &&
-      (JSON.parse(workflow?.execution_data) as ExecutionData).phase ===
-        'Running'
-    ) {
-      subscribeToMore<WorkflowSubscription>({
-        document: WORKFLOW_EVENTS,
-        variables: {
-          workflowRunsInput: {
-            project_id: projectID,
-          },
-        },
+    if (workflow?.phase && workflow.phase === 'Running') {
+      subscribeToMore<WorkflowSubscription, WorkflowSubscriptionInput>({
+        document: WORKFLOW_EVENTS_WITH_EXEC_DATA,
+        variables: { projectID },
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
           const modifiedWorkflows = prev.getWorkflowRuns.workflow_runs.slice();
           const newWorkflow = subscriptionData.data.workflowEventListener;
 
-          // Updating the query data
-          let i = 0;
-          let totalNoOfWorkflows =
+          // Update only the required workflowRun
+          if (
+            modifiedWorkflows[0].workflow_run_id === newWorkflow.workflow_run_id
+          )
+            modifiedWorkflows[0] = newWorkflow;
+
+          const totalNoOfWorkflows =
             prev.getWorkflowRuns.total_no_of_workflow_runs;
 
-          for (; i < modifiedWorkflows.length; i++) {
-            if (
-              modifiedWorkflows[i].workflow_run_id ===
-              newWorkflow.workflow_run_id
-            ) {
-              modifiedWorkflows[i] = newWorkflow;
-              break;
-            }
-          }
-          if (i === modifiedWorkflows.length) {
-            totalNoOfWorkflows++;
-            modifiedWorkflows.unshift(newWorkflow);
-          }
-
           return {
-            ...prev,
             getWorkflowRuns: {
               total_no_of_workflow_runs: totalNoOfWorkflows,
               workflow_runs: modifiedWorkflows,
