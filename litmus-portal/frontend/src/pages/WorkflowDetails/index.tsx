@@ -79,6 +79,7 @@ const WorkflowDetails: React.FC = () => {
           workflow_run_ids: [workflowRunId],
         },
       },
+      fetchPolicy: 'cache-and-network',
     }
   );
 
@@ -114,6 +115,7 @@ const WorkflowDetails: React.FC = () => {
             prev.getWorkflowRuns.total_no_of_workflow_runs;
 
           return {
+            ...prev,
             getWorkflowRuns: {
               total_no_of_workflow_runs: totalNoOfWorkflows,
               workflow_runs: modifiedWorkflows,

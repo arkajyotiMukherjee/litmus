@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ENV VAR SETUP
-export DB_SERVER=mongodb://abf139073b2b845a18a1c6a6a23fbaba-255561107.us-east-2.elb.amazonaws.com:27017
+export DB_SERVER=mongodb://localhost:27017
 export JWT_SECRET=litmus-portal@123
 export PORTAL_ENDPOINT=http://localhost:8080
 export SELF_CLUSTER=false # self-cluster needs k8s env

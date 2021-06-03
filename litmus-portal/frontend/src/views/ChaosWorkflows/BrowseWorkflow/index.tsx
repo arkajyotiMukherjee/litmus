@@ -107,7 +107,7 @@ const BrowseWorkflow: React.FC = () => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data || !prev || !prev.getWorkflowRuns)
           return prev;
-        console.log('PREV => ', prev.getWorkflowRuns.workflow_runs.length);
+
         const modifiedWorkflows = prev.getWorkflowRuns.workflow_runs.slice();
         const newWorkflow = subscriptionData.data.workflowEventListener;
 
@@ -119,13 +119,11 @@ const BrowseWorkflow: React.FC = () => {
           if (
             modifiedWorkflows[i].workflow_run_id === newWorkflow.workflow_run_id
           ) {
-            console.log('mod');
             modifiedWorkflows[i] = newWorkflow;
             break;
           }
         }
         if (i === modifiedWorkflows.length) {
-          console.log('new');
           totalNoOfWorkflows++;
           modifiedWorkflows.unshift(newWorkflow);
         }
