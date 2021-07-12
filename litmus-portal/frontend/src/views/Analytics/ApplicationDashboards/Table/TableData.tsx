@@ -122,7 +122,7 @@ const TableData: React.FC<TableDataProps> = ({ data, alertStateHandler }) => {
           style={{ maxWidth: '7rem' }}
         >
           <img
-            src={`/icons/${data.db_type_id}_dashboard.svg`}
+            src={`./icons/${data.db_type_id}_dashboard.svg`}
             alt={data.db_type_name}
             className={classes.inlineTypeIcon}
           />

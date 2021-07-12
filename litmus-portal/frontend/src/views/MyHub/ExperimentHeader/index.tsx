@@ -33,7 +33,7 @@ const ExperimentHeader: React.FC<ExpInfoProps> = ({
         src={expImg}
         alt="exp icon"
         className={classes.expImg}
-        onError={() => setExpImg('/icons/default-experiment.svg')}
+        onError={() => setExpImg('./icons/default-experiment.svg')}
       />
       <div className={classes.titleDiv}>
         <Typography className={classes.expHeader}>{title}</Typography>
