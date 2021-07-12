@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { IconButton, Typography } from '@material-ui/core';
+import React, { useState } from 'react';
 import useStyles from './styles';
 
 interface ExpInfoProps {
@@ -24,7 +24,7 @@ const ExperimentHeader: React.FC<ExpInfoProps> = ({
         className={classes.backButton}
       >
         <img
-          src="/icons/BackArrow.svg"
+          src="./icons/BackArrow.svg"
           alt="back"
           className={classes.backBtnImg}
         />
